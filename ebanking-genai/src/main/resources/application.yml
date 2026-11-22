@@ -1,0 +1,47 @@
+spring:
+
+  application:
+    name: banking-genai-api
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/banking_genai}
+    username: ${DB_USERNAME:banking_user}
+    password: ${DB_PASSWORD:local_dev_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
+    consumer:
+      group-id: banking-genai-api
+      auto-offset-reset: earliest
+
+server:
+  port: ${SERVER_PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+logging:
+  level:
+    root: INFO
+    com.banking.genai: DEBUG

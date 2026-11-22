@@ -1,0 +1,46 @@
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: banking-postgres
+    environment:
+      POSTGRES_DB: banking_genai
+      POSTGRES_USER: banking_user
+      POSTGRES_PASSWORD: local_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banking_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: banking-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  kafka:
+    image: redpandadata/redpanda:v24.3.1
+    container_name: banking-kafka
+    command:
+      - redpanda
+      - start
+      - --mode
+      - dev-container
+      - --kafka-addr
+      - internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr
+      - internal://kafka:9092,external://localhost:19092
+    ports:
+      - "19092:19092"
+      - "9644:9644"
+
+volumes:
+  postgres_data:
+  redis_data:
