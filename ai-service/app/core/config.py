@@ -1,6 +1,12 @@
+
+import os
 from functools import lru_cache
 
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Load .env into process environment
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -18,9 +24,9 @@ class Settings(BaseSettings):
 
     redis_url: str = "redis://localhost:6379/0"
 
-    aws_region: str = "ap-south-1"
+    aws_region: str = "ap-south-2"
 
-    aws_bedrock_model_id: str = ""
+    aws_bedrock_model_id: str = "amazon.nova-micro-v1:0"
 
     aws_bedrock_embedding_model_id: str = ""
 
@@ -34,3 +40,7 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+    
+    
+# Global settings instance
+settings = get_settings()

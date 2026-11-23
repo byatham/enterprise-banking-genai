@@ -1,5 +1,5 @@
-spring:
 
+spring:
   application:
     name: banking-genai-api
 
@@ -16,6 +16,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
+    baseline-on-migrate: false
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
